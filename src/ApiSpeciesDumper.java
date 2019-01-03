@@ -74,7 +74,7 @@ public class ApiSpeciesDumper {
 		} else if (content.isDirectory()) {
 			processFolder(content);
 		} else {
-			// Ignore non java files.
+			// ignore non java files.
 		}
 	}
 
