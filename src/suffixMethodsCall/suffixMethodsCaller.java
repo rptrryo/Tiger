@@ -14,35 +14,42 @@ public class suffixMethodsCaller {
 	 */
 	public static void main(String[] args) {
 
+		// 計測スタート
+		long measureStart = System.currentTimeMillis();
+
 		// マッチング対象の文字列
 		String matchTargetCode = "J";
 		// suffix付きのメソッドから取得できたコードリスト
 		List<String> codeList = new ArrayList<String>();
 
-        // クラス、メソッドを文字列で指定
+		// クラス、メソッドを文字列で指定
 		suffixMethods sm = new suffixMethods();
-        String clazz = sm.getClass().getName();
-        String baseSuffixMethod = "getReturnCode";
-        int suffixPartStart = 1;
-        int suffixPartEnd = 10;
+		String clazz = sm.getClass().getName();
+		String baseSuffixMethod = "getReturnCode";
+		int suffixPartStart = 1;
+		int suffixPartEnd = 10;
 
-        // リフレクションを利用して、suffix付きのメソッドを実行
-        try {
-            Class<?> c = Class.forName(clazz);
-            Object myObj = c.newInstance();
+		// リフレクションを利用して、suffix付きのメソッドを実行
+		try {
+			Class<?> c = Class.forName(clazz);
+			Object myObj = c.newInstance();
 
-            // suffix部分をループさせてコードリストに突っ込む
-            for ( ; suffixPartStart <= suffixPartEnd; suffixPartStart++) {
-                // 実行メソッドの設定
-                Method m = c.getMethod(baseSuffixMethod + String.format("%02d", suffixPartStart));
-                // コードリストに詰め込む
-                codeList.add(m.invoke(myObj).toString());
-            }
-        } catch(ReflectiveOperationException e) {
-            e.printStackTrace();
-        }
+			// suffix部分をループさせてコードリストに突っ込む
+			for ( ; suffixPartStart <= suffixPartEnd; suffixPartStart++) {
+				// 実行メソッドの設定
+				Method m = c.getMethod(baseSuffixMethod + String.format("%02d", suffixPartStart));
+				// コードリストに詰め込む
+				codeList.add(m.invoke(myObj).toString());
+			}
+		} catch(ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
 
-        // マッチング対象の文字列が、suffix付きメソッドの実行結果リストに含まれるのかboolで出力
-        System.out.println(codeList.contains(matchTargetCode));
+		// マッチング対象の文字列が、suffix付きメソッドの実行結果リストに含まれるのかboolで出力
+		System.out.println(codeList.contains(matchTargetCode));
+
+		// 計測終わり！
+		long measureEnd = System.currentTimeMillis();
+		System.out.println((measureEnd - measureStart) + "ms");
 	}
 }
